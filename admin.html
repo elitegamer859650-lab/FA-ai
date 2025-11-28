@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Furniture Articles AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #b21f1f;
+            font-size: 1.1rem;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn.active {
+            background: #1a2a6c;
+            color: white;
+            border-color: #1a2a6c;
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .admin-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .panel h2 {
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #1a2a6c;
+            outline: none;
+        }
+        
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .knowledge-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .knowledge-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #1a2a6c;
+        }
+        
+        .knowledge-item h4 {
+            color: #1a2a6c;
+            margin-bottom: 8px;
+        }
+        
+        .knowledge-item p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .knowledge-item .keywords {
+            font-size: 0.9rem;
+            color: #b21f1f;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .edit-btn {
+            background: #fdbb2d;
+            color: #000;
+        }
+        
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .conversation-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .conversation-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .user-query {
+            color: #1a2a6c;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .bot-response {
+            color: #666;
+        }
+        
+        .timestamp {
+            font-size: 0.8rem;
+            color: #999;
+            text-align: right;
+            margin-top: 8px;
+        }
+        
+        .home-link {
+            display: inline-block;
+            background: white;
+            color: #1a2a6c;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .home-link:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 1024px) {
+            .admin-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-nav {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Furniture Articles AI - Admin Panel</h1>
+            <p class="subtitle">Manage Knowledge Base, Analytics, and System Settings</p>
+        </header>
+        
+        <div class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('knowledge')">Knowledge Base</button>
+            <button class="nav-btn" onclick="showSection('analytics')">Analytics</button>
+            <button class="nav-btn" onclick="showSection('conversations')">Conversations</button>
+            <button class="nav-btn" onclick="showSection('settings')">Settings</button>
+        </div>
+        
+        <div class="admin-content">
+            <!-- Knowledge Base Section -->
+            <div class="panel" id="knowledge-section">
+                <h2>Manage Knowledge Base</h2>
+                
+                <div class="form-group">
+                    <label for="topic">Topic/Category</label>
+                    <input type="text" id="topic" placeholder="e.g., Sofa, Bed, Table">
+                </div>
+                
+                <div class="form-group">
+                    <label for="keywords">Keywords (comma separated)</label>
+                    <input type="text" id="keywords" placeholder="e.g., sofa, couch, settee, divan">
+                </div>
+                
+                <div class="form-group">
+                    <label for="response">AI Response</label>
+                    <textarea id="response" placeholder="Enter the response that AI should give for this topic..."></textarea>
+                </div>
+                
+                <button class="btn" onclick="addKnowledge()">Add to Knowledge Base</button>
+                
+                <h3 style="margin-top: 30px;">Current Knowledge Base</h3>
+                <div class="knowledge-list" id="knowledgeList">
+                    <!-- Knowledge items will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div class="panel" id="analytics-section" style="display: none;">
+                <h2>Analytics Dashboard</h2>
+                
+                <div class="analytics-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalConversations">0</div>
+                        <div class="stat-label">Total Conversations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="todayConversations">0</div>
+                        <div class="stat-label">Today's Conversations</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="knowledgeEntries">0</div>
+                        <div class="stat-label">Knowledge Entries</div>
+                    </div>
+                </div>
+                
+                <h3>Popular Topics</h3>
+                <div id="popularTopics">
+                    <!-- Popular topics will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Conversations Section -->
+            <div class="panel" id="conversations-section" style="display: none;">
+                <h2>Recent Conversations</h2>
+                <div class="conversation-list" id="conversationList">
+                    <!-- Conversations will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div class="panel" id="settings-section" style="display: none;">
+                <h2>System Settings</h2>
+                
+                <div class="form-group">
+                    <label for="botName">Bot Name</label>
+                    <input type="text" id="botName" value="Furniture Articles AI">
+                </div>
+                
+                <div class="form-group">
+                    <label for="welcomeMessage">Welcome Message</label>
+                    <textarea id="welcomeMessage">Welcome to Furniture Articles AI! 🤖
+
+I'm your intelligent deal assistant. I can help you with:
+• Furniture recommendations
+• Price negotiations
+• Special offers and deals
+• Product information
+
+How can I assist you today?</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="offlineMessage">Offline Mode Message</label>
+                    <input type="text" id="offlineMessage" value="I'm currently in offline mode but can still help with basic furniture inquiries!">
+                </div>
+                
+                <button class="btn">Save Settings</button>
+                <button class="btn btn-secondary" style="margin-left: 10px;">Reset to Default</button>
+            </div>
+        </div>
+        
+        <a href="index.html" class="home-link">← Back to Chatbot</a>
+    </div>
+
+    <!-- Firebase App -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkIT4UJ7d8hDELzFq81A1Z8SR3TFghgvY",
+            authDomain: "ai-agent-b8606.firebaseapp.com",
+            databaseURL: "https://ai-agent-b8606-default-rtdb.firebaseio.com",
+            projectId: "ai-agent-b8606",
+            storageBucket: "ai-agent-b8606.firebasestorage.app",
+            messagingSenderId: "351267901476",
+            appId: "1:351267901476:web:bc66cc4e49166fd2b6c8b1",
+            measurementId: "G-0GZREMN1LQ"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Show/hide sections
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('knowledge-section').style.display = 'none';
+            document.getElementById('analytics-section').style.display = 'none';
+            document.getElementById('conversations-section').style.display = 'none';
+            document.getElementById('settings-section').style.display = 'none';
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected section and set active button
+            document.getElementById(section + '-section').style.display = 'block';
+            event.target.classList.add('active');
+            
+            // Load section data
+            if (section === 'knowledge') {
+                loadKnowledgeBase();
+            } else if (section === 'analytics') {
+                loadAnalytics();
+            } else if (section === 'conversations') {
+                loadConversations();
+            }
+        }
+
+        // Add knowledge base entry
+        function addKnowledge() {
+            const topic = document.getElementById('topic').value.trim();
+            const keywords = document.getElementById('keywords').value.trim();
+            const response = document.getElementById('response').value.trim();
+            
+            if (!topic || !keywords || !response) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            const knowledgeRef = database.ref('knowledge');
+            const newKnowledge = {
+                topic: topic,
+                keywords: keywords.split(',').map(k => k.trim()),
+                response: response,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            knowledgeRef.push(newKnowledge)
+                .then(() => {
+                    alert('Knowledge added successfully!');
+                    document.getElementById('topic').value = '';
+                    document.getElementById('keywords').value = '';
+                    document.getElementById('response').value = '';
+                    loadKnowledgeBase();
+                })
+                .catch(error => {
+                    alert('Error adding knowledge: ' + error.message);
+                });
+        }
+
+        // Load knowledge base
+        function loadKnowledgeBase() {
+            const knowledgeList = document.getElementById('knowledgeList');
+            knowledgeList.innerHTML = '<p>Loading knowledge base...</p>';
+            
+            database.ref('knowledge').on('value', (snapshot) => {
+                knowledgeList.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    knowledgeList.innerHTML = '<p>No knowledge entries found. Add some using the form above.</p>';
+                    return;
+                }
+                
+                snapshot.forEach((childSnapshot) => {
+                    const knowledge = childSnapshot.val();
+                    const key = childSnapshot.key;
+                    
+                    const knowledgeItem = document.createElement('div');
+                    knowledgeItem.className = 'knowledge-item';
+                    knowledgeItem.innerHTML = `
+                        <h4>${knowledge.topic}</h4>
+                        <p>${knowledge.response}</p>
+                        <div class="keywords">Keywords: ${knowledge.keywords.join(', ')}</div>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" onclick="editKnowledge('${key}')">Edit</button>
+                            <button class="action-btn delete-btn" onclick="deleteKnowledge('${key}')">Delete</button>
+                        </div>
+                    `;
+                    
+                    knowledgeList.appendChild(knowledgeItem);
+                });
+            });
+        }
+
+        // Delete knowledge entry
+        function deleteKnowledge(key) {
+            if (confirm('Are you sure you want to delete this knowledge entry?')) {
+                database.ref('knowledge/' + key).remove()
+                    .then(() => {
+                        loadKnowledgeBase();
+                    })
+                    .catch(error => {
+                        alert('Error deleting knowledge: ' + error.message);
+                    });
+            }
+        }
+
+        // Edit knowledge entry (placeholder function)
+        function editKnowledge(key) {
+            alert('Edit functionality will be implemented in the next version');
+        }
+
+        // Load analytics
+        function loadAnalytics() {
+            // Load conversation count
+            database.ref('conversations').once('value')
+                .then(snapshot => {
+                    document.getElementById('totalConversations').textContent = snapshot.numChildren();
+                    
+                    // Calculate today's conversations
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    let todayCount = 0;
+                    
+                    snapshot.forEach(childSnapshot => {
+                        const conversation = childSnapshot.val();
+                        if (conversation.timestamp >= today.getTime()) {
+                            todayCount++;
+                        }
+                    });
+                    
+                    document.getElementById('todayConversations').textContent = todayCount;
+                });
+            
+            // Load knowledge count
+            database.ref('knowledge').once('value')
+                .then(snapshot => {
+                    document.getElementById('knowledgeEntries').textContent = snapshot.numChildren();
+                });
+        }
+
+        // Load conversations
+        function loadConversations() {
+            const conversationList = document.getElementById('conversationList');
+            conversationList.innerHTML = '<p>Loading conversations...</p>';
+            
+            database.ref('conversations').limitToLast(20).on('value', (snapshot) => {
+                conversationList.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    conversationList.innerHTML = '<p>No conversations found yet.</p>';
+                    return;
+                }
+                
+                const conversations = [];
+                snapshot.forEach(childSnapshot => {
+                    conversations.push({
+                        key: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                
+                // Sort by timestamp (newest first)
+                conversations.sort((a, b) => b.timestamp - a.timestamp);
+                
+                conversations.forEach(conversation => {
+                    const date = new Date(conversation.timestamp);
+                    const dateString = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    
+                    const conversationItem = document.createElement('div');
+                    conversationItem.className = 'conversation-item';
+                    conversationItem.innerHTML = `
+                        <div class="user-query">User: ${conversation.userMessage}</div>
+                        <div class="bot-response">AI: ${conversation.botResponse}</div>
+                        <div class="timestamp">${dateString}</div>
+                    `;
+                    
+                    conversationList.appendChild(conversationItem);
+                });
+            });
+        }
+
+        // Initialize the page
+        window.onload = function() {
+            loadKnowledgeBase();
+        };
+    </script>
+</body>
+</html>

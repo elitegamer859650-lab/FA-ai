@@ -15,61 +15,64 @@
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        header {
+        .chatbot-container {
+            width: 100%;
+            max-width: 800px;
             background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        
-        h1 {
-            color: #1a2a6c;
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #b21f1f;
-            font-size: 1.2rem;
-            font-weight: 500;
-        }
-        
-        .main-content {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .chat-container {
-            flex: 2;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 90vh;
+            max-height: 800px;
             backdrop-filter: blur(10px);
         }
         
         .chat-header {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             color: white;
-            padding: 20px;
+            padding: 25px;
             text-align: center;
-            font-weight: bold;
-            font-size: 1.3rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .status {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .online {
+            background: rgba(255, 255, 255, 0.2);
+            color: #4ade80;
+        }
+        
+        .offline {
+            background: rgba(255, 255, 255, 0.2);
+            color: #f87171;
         }
         
         .chat-messages {
@@ -83,36 +86,49 @@
         }
         
         .message {
-            max-width: 80%;
-            padding: 15px 20px;
-            border-radius: 20px;
+            max-width: 85%;
+            padding: 18px 22px;
+            border-radius: 22px;
             line-height: 1.5;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .user-message {
             align-self: flex-end;
             background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             color: white;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 8px;
         }
         
         .bot-message {
             align-self: flex-start;
             background: white;
             color: #333;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 8px;
             border: 1px solid #e0e0e0;
         }
         
         .typing-indicator {
             display: inline-block;
-            padding: 10px 15px;
+            padding: 15px 20px;
             background: #f1f1f1;
-            border-radius: 15px;
+            border-radius: 20px;
             font-style: italic;
             color: #666;
+            border-bottom-left-radius: 8px;
         }
         
         .typing-dots {
@@ -137,210 +153,186 @@
             30% { opacity: 1; }
         }
         
-        .chat-input {
+        .chat-input-container {
             display: flex;
             padding: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #e0e0e0;
             background: white;
+            gap: 12px;
         }
         
-        .chat-input input {
+        .chat-input {
             flex: 1;
-            padding: 15px 20px;
+            padding: 16px 20px;
             border: 2px solid #e0e0e0;
             border-radius: 30px;
             outline: none;
             font-size: 1rem;
-            transition: border 0.3s;
+            transition: all 0.3s;
+            background: #f8f9fa;
         }
         
-        .chat-input input:focus {
+        .chat-input:focus {
             border-color: #1a2a6c;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1);
         }
         
-        .chat-input button {
+        .send-button {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f);
             color: white;
             border: none;
             border-radius: 30px;
-            padding: 15px 30px;
-            margin-left: 15px;
+            padding: 16px 30px;
             cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.3s;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            min-width: 100px;
         }
         
-        .chat-input button:hover {
+        .send-button:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.3);
         }
         
-        .info-panel {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            padding: 25px;
-            backdrop-filter: blur(10px);
+        .send-button:active {
+            transform: translateY(0);
         }
         
-        .info-panel h2 {
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 0 20px 15px;
+            background: white;
+        }
+        
+        .quick-action {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
             color: #1a2a6c;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f1f1f1;
         }
         
-        .info-section {
-            margin-bottom: 25px;
-        }
-        
-        .info-section h3 {
-            color: #b21f1f;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .product-card {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+        .quick-action:hover {
+            background: #1a2a6c;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 10px;
+            transform: translateY(-1px);
         }
         
-        .product-card h4 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
         }
         
-        .admin-link {
-            display: block;
-            text-align: center;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
-            transition: transform 0.3s;
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
         
-        .admin-link:hover {
-            transform: translateY(-3px);
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #1a2a6c;
+            border-radius: 3px;
         }
         
-        .status {
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        
-        .online {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .offline {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .deal-badge {
-            background: #fdbb2d;
-            color: #000;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-left: 10px;
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #b21f1f;
         }
         
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+            .chatbot-container {
+                height: 95vh;
+                border-radius: 15px;
             }
             
-            .chat-container {
-                height: 500px;
+            .chat-header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .message {
+                max-width: 90%;
+                padding: 15px 18px;
+            }
+            
+            .chat-input-container {
+                padding: 15px;
+            }
+            
+            .send-button {
+                padding: 16px 20px;
+                min-width: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .chatbot-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .status {
+                position: static;
+                display: inline-block;
+                margin-top: 8px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
+    <div class="chatbot-container">
+        <div class="chat-header">
             <h1>Furniture Articles AI</h1>
-            <p class="subtitle">Intelligent Deal Assistant - Making Furniture Shopping Smarter</p>
-        </header>
+            <p class="subtitle">Intelligent Deal Assistant 🤖</p>
+            <div class="status online" id="status">Online</div>
+        </div>
         
-        <div class="main-content">
-            <div class="chat-container">
-                <div class="chat-header">
-                    Furniture Deal Assistant
-                    <div class="status online" id="status">Online Mode</div>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message bot-message">
-                        Welcome to Furniture Articles AI! 🤖<br><br>
-                        I'm your intelligent deal assistant. I can help you with:
-                        <br>• Furniture recommendations
-                        <br>• Price negotiations
-                        <br>• Special offers and deals
-                        <br>• Product information
-                        <br><br>How can I assist you today?
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="userInput" placeholder="Ask about furniture, deals, or pricing...">
-                    <button id="sendButton">Send</button>
-                </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Welcome to Furniture Articles AI! 🪑<br><br>
+                I'm your intelligent deal assistant specialized in furniture. I can help you with:
+                <br>• Furniture recommendations & pricing
+                <br>• Deal negotiations
+                <br>• Product information
+                <br>• Special offers
+                <br><br>What furniture are you looking for today?
             </div>
-            
-            <div class="info-panel">
-                <h2>Featured Furniture</h2>
-                
-                <div class="info-section">
-                    <h3>Today's Special Deals <span class="deal-badge">HOT</span></h3>
-                    <div class="product-card">
-                        <h4>Premium Sofa Set</h4>
-                        <p>🛋️ 3+2 Seater | Original: $1,299 | <strong>Deal: $999</strong></p>
-                        <p>✓ Free Delivery | ✓ 5-Year Warranty</p>
-                    </div>
-                    <div class="product-card" style="background: linear-gradient(135deg, #fdbb2d, #b21f1f); margin-top: 15px;">
-                        <h4>Wooden Dining Table</h4>
-                        <p>🍽️ 6-Seater | Original: $599 | <strong>Deal: $449</strong></p>
-                        <p>✓ Assembly Included | ✓ 3-Year Warranty</p>
-                    </div>
-                </div>
-                
-                <div class="info-section">
-                    <h3>Why Choose Us?</h3>
-                    <p>✅ Best Price Guarantee</p>
-                    <p>✅ Quality Certified Furniture</p>
-                    <p>✅ Free Delivery & Assembly</p>
-                    <p>✅ Flexible Payment Options</p>
-                    <p>✅ 7-Day Return Policy</p>
-                </div>
-                
-                <div class="info-section">
-                    <h3>Quick Actions</h3>
-                    <p>Ask me about:</p>
-                    <p>• "Current discounts"</p>
-                    <p>• "Sofa prices"</p>
-                    <p>• "Bedroom sets"</p>
-                    <p>• "Office furniture"</p>
-                    <p>• "Payment plans"</p>
-                </div>
-                
-                <a href="admin.html" class="admin-link">Admin Panel</a>
-            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="quick-action" onclick="quickAction('sofa prices')">Sofa Prices</div>
+            <div class="quick-action" onclick="quickAction('current deals')">Current Deals</div>
+            <div class="quick-action" onclick="quickAction('bedroom furniture')">Bedroom Sets</div>
+            <div class="quick-action" onclick="quickAction('office furniture')">Office Furniture</div>
+            <div class="quick-action" onclick="quickAction('delivery info')">Delivery Info</div>
+        </div>
+        
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="userInput" placeholder="Type your message about furniture, deals, or pricing..." autocomplete="off">
+            <button class="send-button" id="sendButton">Send</button>
         </div>
     </div>
 
-    <!-- Firebase App (the core Firebase SDK) -->
+    <!-- Firebase App -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
     <!-- Firebase Database -->
     <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
@@ -374,10 +366,10 @@
 
         function updateOnlineStatus() {
             if (navigator.onLine) {
-                status.textContent = 'Online Mode';
+                status.textContent = 'Online';
                 status.className = 'status online';
             } else {
-                status.textContent = 'Offline Mode';
+                status.textContent = 'Offline';
                 status.className = 'status offline';
             }
         }
@@ -385,35 +377,43 @@
         // Initial status check
         updateOnlineStatus();
 
-        // Sample furniture knowledge base
+        // Furniture knowledge base
         const furnitureKnowledge = {
             'sofa': {
-                answer: 'We have various sofa sets available! 🛋️\n\n• 3+2 Seater: $999 (Original $1,299)\n• L-shaped Sofa: $1,199\n• Recliner Sofa: $1,499\n\nAll sofas come with 5-year warranty and free delivery!',
-                keywords: ['sofa', 'couch', 'settee', 'divan']
+                answer: 'We have various sofa sets available! 🛋️\n\n• 3+2 Seater Luxury: $999 (Original $1,299)\n• L-shaped Modern Sofa: $1,199\n• Recliner Sofa Set: $1,499\n• Executive Leather Sofa: $1,799\n\nAll sofas include 5-year warranty and FREE delivery! Which type interests you?',
+                keywords: ['sofa', 'couch', 'settee', 'divan', 'sofas']
             },
             'bed': {
-                answer: 'Beautiful beds for your bedroom! 🛏️\n\n• King Size Bed: $799\n• Queen Size Bed: $599\n• Single Bed: $299\n\nAll beds include mattress and free assembly!',
-                keywords: ['bed', 'mattress', 'bedroom', 'sleep']
+                answer: 'Beautiful beds for your bedroom! 🛏️\n\n• King Size Storage Bed: $799\n• Queen Size Canopy Bed: $599\n• Single Bed with Mattress: $299\n• Bunk Beds (Kids): $449\n\nAll beds include mattress and FREE assembly! Need help choosing?',
+                keywords: ['bed', 'mattress', 'bedroom', 'sleep', 'beds']
             },
             'table': {
-                answer: 'Stylish tables available! 🍽️\n\n• Dining Table (6-seater): $449\n• Coffee Table: $199\n• Study Table: $299\n\nSpecial discount on dining sets!',
-                keywords: ['table', 'dining', 'desk', 'study']
+                answer: 'Stylish tables available! 🍽️\n\n• 6-Seater Dining Table: $449\n• Glass Coffee Table: $199\n• Executive Office Desk: $299\n• Study Table Set: $349\n\nSpecial discount on complete dining sets!',
+                keywords: ['table', 'dining', 'desk', 'study', 'tables']
             },
             'chair': {
-                answer: 'Comfortable chairs for every need! 💺\n\n• Office Chair: $199\n• Dining Chair: $89\n• Recliner Chair: $399\n\nBuy 4 dining chairs get 1 free!',
-                keywords: ['chair', 'seat', 'stool']
+                answer: 'Comfortable chairs for every need! 💺\n\n• Ergonomic Office Chair: $199\n• Dining Chair (Single): $89\n• Recliner Chair: $399\n• Gaming Chair: $249\n\n🔥 Buy 4 dining chairs get 1 FREE!',
+                keywords: ['chair', 'seat', 'stool', 'chairs']
             },
-            'discount': {
-                answer: 'Current Special Offers: 🎉\n\n• 20% OFF on all sofa sets\n• Buy 1 get 1 free on dining chairs\n• Free assembly with any purchase above $500\n• EMI options available\n\nAsk me about specific products for best deals!',
-                keywords: ['discount', 'offer', 'deal', 'sale', 'promotion']
+            'deal': {
+                answer: 'Current Special Offers: 🎉\n\n• 20% OFF on all sofa sets\n• Buy 1 get 1 free on dining chairs\n• FREE assembly with purchases above $500\n• 0% EMI options available\n• Price matching guarantee\n\nWhat product are you interested in?',
+                keywords: ['discount', 'offer', 'deal', 'sale', 'promotion', 'special']
             },
             'delivery': {
-                answer: 'Delivery Information: 🚚\n\n• Free delivery within city\n• 2-3 days delivery time\n• Assembly service included\n• Cash on delivery available\n\nWe ensure safe and timely delivery!',
-                keywords: ['delivery', 'shipping', 'assembly', 'install']
+                answer: 'Delivery Information: 🚚\n\n• FREE delivery within city limits\n• 2-3 business days delivery\n• Professional assembly included\n• Cash on delivery available\n• Safe & insured transportation\n\nYour furniture arrives ready to use!',
+                keywords: ['delivery', 'shipping', 'assembly', 'install', 'transport']
             },
             'price': {
-                answer: 'We offer competitive pricing! 💰\n\n• Best price guarantee\n• Price matching available\n• EMI options\n• Bulk order discounts\n\nTell me which product you\'re interested in for exact pricing.',
-                keywords: ['price', 'cost', 'expensive', 'cheap', 'budget']
+                answer: 'We offer competitive pricing! 💰\n\n• Best price guarantee\n• Price matching with competitors\n• Flexible EMI options\n• Bulk order discounts\n• Seasonal offers available\n\nWhich furniture item would you like pricing for?',
+                keywords: ['price', 'cost', 'expensive', 'cheap', 'budget', 'how much']
+            },
+            'office': {
+                answer: 'Professional office furniture! 🏢\n\n• Executive Desk: $299\n• Office Chair: $199\n• Conference Table: $599\n• Filing Cabinet: $149\n• Workstation Set: $799\n\nSpecial corporate discounts available!',
+                keywords: ['office', 'work', 'corporate', 'business', 'professional']
+            },
+            'warranty': {
+                answer: 'Warranty & Support: 🛡️\n\n• 5-year warranty on all furniture\n• Free maintenance for first year\n• 24/7 customer support\n• Easy return policy (7 days)\n• Quality certified products\n\nYour satisfaction is guaranteed!',
+                keywords: ['warranty', 'guarantee', 'support', 'return', 'quality']
             }
         };
 
@@ -440,6 +440,12 @@
             }, 1500);
         }
 
+        // Quick action function
+        function quickAction(action) {
+            userInput.value = action;
+            sendMessage();
+        }
+
         // Add message to chat
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
@@ -454,7 +460,7 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message typing-indicator';
             typingDiv.id = 'typingIndicator';
-            typingDiv.innerHTML = 'Furniture AI is typing<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            typingDiv.innerHTML = 'Furniture AI is thinking<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -488,11 +494,15 @@
             }
 
             if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('number')) {
-                return 'You can reach us at:\n📞 Phone: 1-800-FURNITURE\n📧 Email: support@furniturearticles.com\n🏢 Visit: 123 Furniture Street, Your City\n\nWe\'re here to help!';
+                return 'You can reach us at:\n📞 Phone: 1-800-FURNITURE\n📧 Email: support@furniturearticles.com\n🏢 Visit: 123 Furniture Street, Your City\n\nWe\'re here to help with all your furniture needs!';
+            }
+
+            if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+                return 'Thank you for chatting with Furniture Articles AI! 🪑\nFeel free to come back anytime for furniture deals and advice. Have a great day!';
             }
 
             // Fallback response
-            return 'I understand you\'re interested in furniture! 🪑\n\nI can help you with:\n• Product recommendations\n• Pricing information\n• Current deals and discounts\n• Delivery options\n\nWhat specific furniture item are you looking for?';
+            return 'I understand you\'re interested in furniture! 🪑\n\nI can help you with:\n• Product recommendations\n• Pricing information\n• Current deals and discounts\n• Delivery options\n\nWhat specific furniture item are you looking for? You can ask about sofas, beds, tables, chairs, or office furniture.';
         }
 
         // Save conversation to Firebase
@@ -514,10 +524,10 @@
             }
         });
 
-        // Load initial chat messages from Firebase (optional)
-        database.ref('conversations').limitToLast(5).on('value', (snapshot) => {
-            // This can be used to show recent conversations
-        });
+        // Focus on input when page loads
+        window.onload = function() {
+            userInput.focus();
+        };
     </script>
 </body>
 </html>

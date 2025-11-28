@@ -309,25 +309,20 @@
         <div class="chat-messages" id="chatMessages">
             <div class="message bot-message">
                 Welcome to Furniture Articles AI! 🪑<br><br>
-                I'm your intelligent deal assistant specialized in furniture. I can help you with:
-                <br>• Furniture recommendations & pricing
-                <br>• Deal negotiations
-                <br>• Product information
-                <br>• Special offers
-                <br><br>What furniture are you looking for today?
+                I'm your intelligent furniture assistant. I can help you with furniture information based on my knowledge base.<br><br>
+                How can I assist you with furniture today?
             </div>
         </div>
         
         <div class="quick-actions">
-            <div class="quick-action" onclick="quickAction('sofa prices')">Sofa Prices</div>
-            <div class="quick-action" onclick="quickAction('current deals')">Current Deals</div>
-            <div class="quick-action" onclick="quickAction('bedroom furniture')">Bedroom Sets</div>
-            <div class="quick-action" onclick="quickAction('office furniture')">Office Furniture</div>
-            <div class="quick-action" onclick="quickAction('delivery info')">Delivery Info</div>
+            <div class="quick-action" onclick="quickAction('sofa')">Sofa Information</div>
+            <div class="quick-action" onclick="quickAction('bed')">Bed Information</div>
+            <div class="quick-action" onclick="quickAction('table')">Table Information</div>
+            <div class="quick-action" onclick="quickAction('delivery')">Delivery Info</div>
         </div>
         
         <div class="chat-input-container">
-            <input type="text" class="chat-input" id="userInput" placeholder="Type your message about furniture, deals, or pricing..." autocomplete="off">
+            <input type="text" class="chat-input" id="userInput" placeholder="Ask about furniture, deals, or pricing..." autocomplete="off">
             <button class="send-button" id="sendButton">Send</button>
         </div>
     </div>
@@ -377,45 +372,21 @@
         // Initial status check
         updateOnlineStatus();
 
-        // Furniture knowledge base
-        const furnitureKnowledge = {
-            'sofa': {
-                answer: 'We have various sofa sets available! 🛋️\n\n• 3+2 Seater Luxury: $999 (Original $1,299)\n• L-shaped Modern Sofa: $1,199\n• Recliner Sofa Set: $1,499\n• Executive Leather Sofa: $1,799\n\nAll sofas include 5-year warranty and FREE delivery! Which type interests you?',
-                keywords: ['sofa', 'couch', 'settee', 'divan', 'sofas']
-            },
-            'bed': {
-                answer: 'Beautiful beds for your bedroom! 🛏️\n\n• King Size Storage Bed: $799\n• Queen Size Canopy Bed: $599\n• Single Bed with Mattress: $299\n• Bunk Beds (Kids): $449\n\nAll beds include mattress and FREE assembly! Need help choosing?',
-                keywords: ['bed', 'mattress', 'bedroom', 'sleep', 'beds']
-            },
-            'table': {
-                answer: 'Stylish tables available! 🍽️\n\n• 6-Seater Dining Table: $449\n• Glass Coffee Table: $199\n• Executive Office Desk: $299\n• Study Table Set: $349\n\nSpecial discount on complete dining sets!',
-                keywords: ['table', 'dining', 'desk', 'study', 'tables']
-            },
-            'chair': {
-                answer: 'Comfortable chairs for every need! 💺\n\n• Ergonomic Office Chair: $199\n• Dining Chair (Single): $89\n• Recliner Chair: $399\n• Gaming Chair: $249\n\n🔥 Buy 4 dining chairs get 1 FREE!',
-                keywords: ['chair', 'seat', 'stool', 'chairs']
-            },
-            'deal': {
-                answer: 'Current Special Offers: 🎉\n\n• 20% OFF on all sofa sets\n• Buy 1 get 1 free on dining chairs\n• FREE assembly with purchases above $500\n• 0% EMI options available\n• Price matching guarantee\n\nWhat product are you interested in?',
-                keywords: ['discount', 'offer', 'deal', 'sale', 'promotion', 'special']
-            },
-            'delivery': {
-                answer: 'Delivery Information: 🚚\n\n• FREE delivery within city limits\n• 2-3 business days delivery\n• Professional assembly included\n• Cash on delivery available\n• Safe & insured transportation\n\nYour furniture arrives ready to use!',
-                keywords: ['delivery', 'shipping', 'assembly', 'install', 'transport']
-            },
-            'price': {
-                answer: 'We offer competitive pricing! 💰\n\n• Best price guarantee\n• Price matching with competitors\n• Flexible EMI options\n• Bulk order discounts\n• Seasonal offers available\n\nWhich furniture item would you like pricing for?',
-                keywords: ['price', 'cost', 'expensive', 'cheap', 'budget', 'how much']
-            },
-            'office': {
-                answer: 'Professional office furniture! 🏢\n\n• Executive Desk: $299\n• Office Chair: $199\n• Conference Table: $599\n• Filing Cabinet: $149\n• Workstation Set: $799\n\nSpecial corporate discounts available!',
-                keywords: ['office', 'work', 'corporate', 'business', 'professional']
-            },
-            'warranty': {
-                answer: 'Warranty & Support: 🛡️\n\n• 5-year warranty on all furniture\n• Free maintenance for first year\n• 24/7 customer support\n• Easy return policy (7 days)\n• Quality certified products\n\nYour satisfaction is guaranteed!',
-                keywords: ['warranty', 'guarantee', 'support', 'return', 'quality']
-            }
-        };
+        // Load knowledge base from Firebase
+        let furnitureKnowledge = {};
+
+        function loadKnowledgeBase() {
+            database.ref('knowledge').on('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    furnitureKnowledge = snapshot.val();
+                    console.log('Knowledge base loaded:', furnitureKnowledge);
+                } else {
+                    // Default empty knowledge base
+                    furnitureKnowledge = {};
+                    console.log('No knowledge base found in Firebase');
+                }
+            });
+        }
 
         // Send message function
         function sendMessage() {
@@ -460,7 +431,7 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message typing-indicator';
             typingDiv.id = 'typingIndicator';
-            typingDiv.innerHTML = 'Furniture AI is thinking<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            typingDiv.innerHTML = 'Checking knowledge base<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -473,36 +444,107 @@
             }
         }
 
-        // Generate AI response
+        // Generate AI response - ONLY uses provided knowledge for furniture, basic greetings allowed
         function generateResponse(userMessage) {
             const lowerMessage = userMessage.toLowerCase();
             
-            // Check for matches in knowledge base
-            for (const [key, data] of Object.entries(furnitureKnowledge)) {
-                if (data.keywords.some(keyword => lowerMessage.includes(keyword))) {
-                    return data.answer;
+            // Check for exact matches in knowledge base first
+            let bestMatch = null;
+            let highestScore = 0;
+
+            // Search through all knowledge entries
+            for (const key in furnitureKnowledge) {
+                const knowledge = furnitureKnowledge[key];
+                const keywords = knowledge.keywords || [];
+                
+                // Calculate match score based on keyword matches
+                let score = 0;
+                keywords.forEach(keyword => {
+                    if (lowerMessage.includes(keyword.toLowerCase())) {
+                        score += 1;
+                    }
+                });
+                
+                if (score > highestScore) {
+                    highestScore = score;
+                    bestMatch = knowledge;
                 }
             }
 
-            // Default responses
+            // If we found a good match, return the provided response
+            if (bestMatch && highestScore > 0) {
+                return bestMatch.response;
+            }
+
+            // ========== BASIC CONVERSATION RESPONSES ==========
+            // These are the only self-generated responses allowed
+            
+            // Greetings
             if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-                return 'Hello! Welcome to Furniture Articles AI! 🪑\nI specialize in helping you find the perfect furniture deals. What type of furniture are you looking for today?';
+                return 'Hello! Welcome to Furniture Articles AI! How can I help you with furniture today?';
             }
             
-            if (lowerMessage.includes('thank')) {
-                return 'You\'re welcome! 😊 Is there anything else you\'d like to know about our furniture collection or current deals?';
+            // How are you
+            if (lowerMessage.includes('how are you') || lowerMessage.includes('how do you do')) {
+                return "I'm doing great, thank you for asking! I'm here and ready to help you with any furniture questions you have.";
+            }
+            
+            // I'm fine responses
+            if (lowerMessage.includes("i'm fine") || lowerMessage.includes('i am fine') || lowerMessage.includes("i'm good") || lowerMessage.includes('i am good')) {
+                return "That's wonderful to hear! 😊 How can I assist you with furniture today?";
+            }
+            
+            // Good morning/afternoon/evening
+            if (lowerMessage.includes('good morning')) {
+                return 'Good morning! ☀️ Hope you have a great day. How can I help with furniture?';
+            }
+            if (lowerMessage.includes('good afternoon')) {
+                return 'Good afternoon! 🌤️ What furniture information can I provide?';
+            }
+            if (lowerMessage.includes('good evening')) {
+                return 'Good evening! 🌙 How can I assist you with furniture?';
+            }
+            
+            // Thank you
+            if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
+                return "You're welcome! 😊 Is there anything else about furniture you'd like to know?";
             }
 
-            if (lowerMessage.includes('contact') || lowerMessage.includes('phone') || lowerMessage.includes('number')) {
-                return 'You can reach us at:\n📞 Phone: 1-800-FURNITURE\n📧 Email: support@furniturearticles.com\n🏢 Visit: 123 Furniture Street, Your City\n\nWe\'re here to help with all your furniture needs!';
+            // Goodbye
+            if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye') || lowerMessage.includes('see you')) {
+                return 'Thank you for chatting with Furniture Articles AI! Feel free to come back if you have more furniture questions. Have a great day! 👋';
             }
 
-            if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
-                return 'Thank you for chatting with Furniture Articles AI! 🪑\nFeel free to come back anytime for furniture deals and advice. Have a great day!';
+            // Who are you
+            if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you')) {
+                return "I'm Furniture Articles AI, your intelligent furniture assistant. I help with furniture information and queries based on my knowledge base.";
             }
 
-            // Fallback response
-            return 'I understand you\'re interested in furniture! 🪑\n\nI can help you with:\n• Product recommendations\n• Pricing information\n• Current deals and discounts\n• Delivery options\n\nWhat specific furniture item are you looking for? You can ask about sofas, beds, tables, chairs, or office furniture.';
+            // Help
+            if (lowerMessage.includes('help')) {
+                return "I can help you with furniture information from my knowledge base. You can ask about specific furniture items, or use the quick action buttons above.";
+            }
+
+            // ========== FURNITURE-RELATED UNKNOWN RESPONSES ==========
+            // For furniture-related queries without knowledge, be honest
+            
+            const furnitureKeywords = ['sofa', 'bed', 'table', 'chair', 'furniture', 'price', 'cost', 'deal', 'discount', 'delivery', 'warranty', 'office', 'dining', 'living room', 'bedroom'];
+            const isFurnitureQuery = furnitureKeywords.some(keyword => lowerMessage.includes(keyword));
+            
+            if (isFurnitureQuery) {
+                if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('how much')) {
+                    return "I don't have specific pricing information for that item in my knowledge base yet. Please check our website or contact us for current prices.";
+                }
+                
+                if (lowerMessage.includes('deal') || lowerMessage.includes('discount') || lowerMessage.includes('offer') || lowerMessage.includes('sale')) {
+                    return "I don't have information about current deals for that product in my knowledge base. Please check our latest promotions on our website.";
+                }
+                
+                return "I don't have specific information about that furniture item in my knowledge base yet. You can ask me about other furniture products or check our website for more details.";
+            }
+
+            // General unknown response (non-furniture)
+            return "I'm primarily here to help with furniture-related questions. If you have questions about sofas, beds, tables, chairs, or other furniture, feel free to ask!";
         }
 
         // Save conversation to Firebase
@@ -524,8 +566,9 @@
             }
         });
 
-        // Focus on input when page loads
+        // Load knowledge base and focus on input when page loads
         window.onload = function() {
+            loadKnowledgeBase();
             userInput.focus();
         };
     </script>

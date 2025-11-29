@@ -3,132 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furniture Articles AI - Smart Deal Assistant</title>
+    <title>Furniture Articles AI | Intelligent Deal Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #0f1b3a 0%, #2d1b4e 50%, #4a1c5e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.15) 0%, transparent 50%);
+            z-index: -1;
         }
         
         .chatbot-container {
             width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 90vh;
-            max-height: 800px;
-            backdrop-filter: blur(10px);
+            height: 85vh;
+            max-height: 780px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .chatbot-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
         }
         
         .chat-header {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background: linear-gradient(135deg, rgba(26, 42, 108, 0.9) 0%, rgba(178, 31, 31, 0.9) 100%);
             color: white;
-            padding: 25px;
+            padding: 24px;
             text-align: center;
             position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            right: 5%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fff, #fdbb2d);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #1a2a6c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
             font-weight: 700;
+            letter-spacing: -0.5px;
         }
         
         .subtitle {
-            font-size: 1rem;
+            font-size: 0.85rem;
             opacity: 0.9;
             font-weight: 400;
+            letter-spacing: 0.5px;
         }
         
         .status {
             position: absolute;
-            top: 15px;
+            top: 20px;
             right: 20px;
             padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         
-        .online {
-            background: rgba(255, 255, 255, 0.2);
-            color: #4ade80;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
         }
-        
-        .offline {
-            background: rgba(255, 255, 255, 0.2);
-            color: #f87171;
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         
         .chat-messages {
             flex: 1;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            background: #f8f9fa;
+            gap: 16px;
+            background: transparent;
         }
         
         .message {
             max-width: 85%;
-            padding: 18px 22px;
-            border-radius: 22px;
+            padding: 16px 20px;
+            border-radius: 20px;
             line-height: 1.5;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             position: relative;
-            animation: messageAppear 0.3s ease-out;
+            animation: messageAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
         }
         
         @keyframes messageAppear {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(10px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         
         .user-message {
             align-self: flex-end;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background: linear-gradient(135deg, #1a6cff 0%, #1a2a6c 100%);
             color: white;
             border-bottom-right-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .bot-message {
             align-self: flex-start;
-            background: white;
-            color: #333;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
             border-bottom-left-radius: 8px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .bot-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
         }
         
         .typing-indicator {
             display: inline-block;
-            padding: 15px 20px;
-            background: #f1f1f1;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             font-style: italic;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
             border-bottom-left-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
         }
         
         .typing-dots {
@@ -156,48 +244,59 @@
         .chat-input-container {
             display: flex;
             padding: 20px;
-            border-top: 1px solid #e0e0e0;
-            background: white;
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             gap: 12px;
+            align-items: center;
         }
         
         .chat-input {
             flex: 1;
             padding: 16px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
             outline: none;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: #f8f9fa;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
         .chat-input:focus {
-            border-color: #1a2a6c;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
         
         .send-button {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background: linear-gradient(135deg, #1a6cff 0%, #1a2a6c 100%);
             color: white;
             border: none;
-            border-radius: 30px;
-            padding: 16px 30px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s;
-            min-width: 100px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(26, 108, 255, 0.3);
         }
         
         .send-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(26, 108, 255, 0.4);
         }
-        
+
         .send-button:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
         
         .quick-actions {
@@ -205,24 +304,33 @@
             flex-wrap: wrap;
             gap: 10px;
             padding: 0 20px 15px;
-            background: white;
+            background: transparent;
         }
         
         .quick-action {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
+            padding: 10px 16px;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.2s;
-            color: #1a2a6c;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            flex: 1;
+            min-width: calc(50% - 10px);
+            text-align: center;
         }
         
         .quick-action:hover {
-            background: #1a2a6c;
-            color: white;
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .quick-action i {
+            margin-right: 6px;
+            opacity: 0.8;
         }
         
         /* Scrollbar styling */
@@ -231,49 +339,47 @@
         }
         
         .chat-messages::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
         }
         
         .chat-messages::-webkit-scrollbar-thumb {
-            background: #1a2a6c;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 3px;
         }
         
         .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #b21f1f;
+            background: rgba(255, 255, 255, 0.3);
         }
-        
-        @media (max-width: 768px) {
-            .chatbot-container {
-                height: 95vh;
-                border-radius: 15px;
-            }
-            
-            .chat-header {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .subtitle {
-                font-size: 0.9rem;
-            }
-            
-            .message {
-                max-width: 90%;
-                padding: 15px 18px;
-            }
-            
-            .chat-input-container {
-                padding: 15px;
-            }
-            
-            .send-button {
-                padding: 16px 20px;
-                min-width: 80px;
-            }
+
+        /* Message timestamp */
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-top: 6px;
+            text-align: right;
+        }
+
+        /* Welcome message styling */
+        .welcome-message {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .welcome-message h3 {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .welcome-message p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
         }
         
         @media (max-width: 480px) {
@@ -282,48 +388,103 @@
             }
             
             .chatbot-container {
-                height: 100vh;
-                border-radius: 0;
+                height: 90vh;
+                border-radius: 20px;
+                max-width: 100%;
             }
             
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.4rem;
             }
             
-            .status {
-                position: static;
-                display: inline-block;
-                margin-top: 8px;
+            .message {
+                max-width: 90%;
+                padding: 14px 18px;
             }
+            
+            .chat-input-container {
+                padding: 15px;
+            }
+            
+            .quick-action {
+                min-width: 100%;
+            }
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(360deg); }
         }
     </style>
 </head>
 <body>
+    <div class="particles" id="particles"></div>
+    
     <div class="chatbot-container">
         <div class="chat-header">
-            <h1>Furniture Articles AI</h1>
-            <p class="subtitle">Intelligent Deal Assistant 🤖</p>
-            <div class="status online" id="status">Online</div>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-couch"></i>
+                </div>
+                <div>
+                    <h1>Furniture AI</h1>
+                    <p class="subtitle">Intelligent Assistant</p>
+                </div>
+            </div>
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>Online</span>
+            </div>
         </div>
         
         <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message">
+                <h3>Welcome to Furniture AI</h3>
+                <p>Your intelligent furniture assistant. Ask me about products, pricing, or check our latest collections.</p>
+            </div>
             <div class="message bot-message">
-                Welcome to Furniture Articles AI! 🪑<br><br>
-                I'm your intelligent furniture assistant. I can help you with furniture information based on my knowledge base.<br><br>
-                How can I assist you with furniture today?
+                Hello! I'm your Furniture AI assistant. How can I help you with furniture today?
+                <div class="message-time">Just now</div>
             </div>
         </div>
         
         <div class="quick-actions">
-            <div class="quick-action" onclick="quickAction('sofa')">Sofa Information</div>
-            <div class="quick-action" onclick="quickAction('bed')">Bed Information</div>
-            <div class="quick-action" onclick="quickAction('table')">Table Information</div>
-            <div class="quick-action" onclick="quickAction('delivery')">Delivery Info</div>
+            <div class="quick-action" onclick="quickAction('sofa')">
+                <i class="fas fa-couch"></i> Sofa Info
+            </div>
+            <div class="quick-action" onclick="quickAction('bed')">
+                <i class="fas fa-bed"></i> Bed Info
+            </div>
+            <div class="quick-action" onclick="quickAction('table')">
+                <i class="fas fa-table"></i> Table Info
+            </div>
+            <div class="quick-action" onclick="quickAction('delivery')">
+                <i class="fas fa-shipping-fast"></i> Delivery
+            </div>
         </div>
         
         <div class="chat-input-container">
-            <input type="text" class="chat-input" id="userInput" placeholder="Ask about furniture, deals, or pricing..." autocomplete="off">
-            <button class="send-button" id="sendButton">Send</button>
+            <input type="text" class="chat-input" id="userInput" placeholder="Type your message..." autocomplete="off">
+            <button class="send-button" id="sendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 
@@ -353,24 +514,31 @@
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendButton = document.getElementById('sendButton');
-        const status = document.getElementById('status');
+        const status = document.querySelector('.status');
 
-        // Check online/offline status
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-
-        function updateOnlineStatus() {
-            if (navigator.onLine) {
-                status.textContent = 'Online';
-                status.className = 'status online';
-            } else {
-                status.textContent = 'Offline';
-                status.className = 'status offline';
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 1;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = Math.random() * 20 + 20;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
             }
         }
-
-        // Initial status check
-        updateOnlineStatus();
 
         // Load knowledge base from Firebase
         let furnitureKnowledge = {};
@@ -381,7 +549,6 @@
                     furnitureKnowledge = snapshot.val();
                     console.log('Knowledge base loaded:', furnitureKnowledge);
                 } else {
-                    // Default empty knowledge base
                     furnitureKnowledge = {};
                     console.log('No knowledge base found in Firebase');
                 }
@@ -421,7 +588,14 @@
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
-            messageDiv.textContent = text;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                ${text}
+                <div class="message-time">${time}</div>
+            `;
+            
             chatMessages.appendChild(messageDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -431,7 +605,7 @@
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message bot-message typing-indicator';
             typingDiv.id = 'typingIndicator';
-            typingDiv.innerHTML = 'Checking knowledge base<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            typingDiv.innerHTML = 'Furniture AI is thinking<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
             chatMessages.appendChild(typingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
@@ -444,7 +618,7 @@
             }
         }
 
-        // Generate AI response - ONLY uses provided knowledge for furniture, basic greetings allowed
+        // Generate AI response
         function generateResponse(userMessage) {
             const lowerMessage = userMessage.toLowerCase();
             
@@ -476,59 +650,29 @@
                 return bestMatch.response;
             }
 
-            // ========== BASIC CONVERSATION RESPONSES ==========
-            // These are the only self-generated responses allowed
-            
-            // Greetings
+            // Basic conversation responses
             if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-                return 'Hello! Welcome to Furniture Articles AI! How can I help you with furniture today?';
+                return 'Hello! Welcome to Furniture AI. How can I assist you with furniture today?';
             }
             
-            // How are you
-            if (lowerMessage.includes('how are you') || lowerMessage.includes('how do you do')) {
-                return "I'm doing great, thank you for asking! I'm here and ready to help you with any furniture questions you have.";
+            if (lowerMessage.includes('how are you')) {
+                return "I'm doing great, thank you! Ready to help you find the perfect furniture. What are you looking for?";
             }
             
-            // I'm fine responses
-            if (lowerMessage.includes("i'm fine") || lowerMessage.includes('i am fine') || lowerMessage.includes("i'm good") || lowerMessage.includes('i am good')) {
+            if (lowerMessage.includes("i'm fine") || lowerMessage.includes('i am fine') || lowerMessage.includes("i'm good")) {
                 return "That's wonderful to hear! 😊 How can I assist you with furniture today?";
             }
             
-            // Good morning/afternoon/evening
-            if (lowerMessage.includes('good morning')) {
-                return 'Good morning! ☀️ Hope you have a great day. How can I help with furniture?';
-            }
-            if (lowerMessage.includes('good afternoon')) {
-                return 'Good afternoon! 🌤️ What furniture information can I provide?';
-            }
-            if (lowerMessage.includes('good evening')) {
-                return 'Good evening! 🌙 How can I assist you with furniture?';
-            }
-            
-            // Thank you
-            if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-                return "You're welcome! 😊 Is there anything else about furniture you'd like to know?";
+            if (lowerMessage.includes('thank')) {
+                return "You're welcome! Is there anything else about furniture you'd like to know?";
             }
 
-            // Goodbye
-            if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye') || lowerMessage.includes('see you')) {
-                return 'Thank you for chatting with Furniture Articles AI! Feel free to come back if you have more furniture questions. Have a great day! 👋';
+            if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+                return 'Thank you for chatting with Furniture AI! Feel free to come back if you have more furniture questions. Have a great day!';
             }
 
-            // Who are you
-            if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you')) {
-                return "I'm Furniture Articles AI, your intelligent furniture assistant. I help with furniture information and queries based on my knowledge base.";
-            }
-
-            // Help
-            if (lowerMessage.includes('help')) {
-                return "I can help you with furniture information from my knowledge base. You can ask about specific furniture items, or use the quick action buttons above.";
-            }
-
-            // ========== FURNITURE-RELATED UNKNOWN RESPONSES ==========
-            // For furniture-related queries without knowledge, be honest
-            
-            const furnitureKeywords = ['sofa', 'bed', 'table', 'chair', 'furniture', 'price', 'cost', 'deal', 'discount', 'delivery', 'warranty', 'office', 'dining', 'living room', 'bedroom'];
+            // Furniture-related unknown responses
+            const furnitureKeywords = ['sofa', 'bed', 'table', 'chair', 'furniture', 'price', 'cost', 'deal', 'discount', 'delivery'];
             const isFurnitureQuery = furnitureKeywords.some(keyword => lowerMessage.includes(keyword));
             
             if (isFurnitureQuery) {
@@ -536,14 +680,14 @@
                     return "I don't have specific pricing information for that item in my knowledge base yet. Please check our website or contact us for current prices.";
                 }
                 
-                if (lowerMessage.includes('deal') || lowerMessage.includes('discount') || lowerMessage.includes('offer') || lowerMessage.includes('sale')) {
+                if (lowerMessage.includes('deal') || lowerMessage.includes('discount') || lowerMessage.includes('offer')) {
                     return "I don't have information about current deals for that product in my knowledge base. Please check our latest promotions on our website.";
                 }
                 
                 return "I don't have specific information about that furniture item in my knowledge base yet. You can ask me about other furniture products or check our website for more details.";
             }
 
-            // General unknown response (non-furniture)
+            // General unknown response
             return "I'm primarily here to help with furniture-related questions. If you have questions about sofas, beds, tables, chairs, or other furniture, feel free to ask!";
         }
 
@@ -566,8 +710,9 @@
             }
         });
 
-        // Load knowledge base and focus on input when page loads
+        // Initialize the application
         window.onload = function() {
+            createParticles();
             loadKnowledgeBase();
             userInput.focus();
         };
